@@ -1,0 +1,136 @@
+﻿@model Clothing_v2._2.Models.ProfileModels
+
+@{
+    ViewBag.Title = "Questionnaire";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>
+    Вопросы для более точной эксперной оценки
+</h2>
+
+<h1>@ViewData["Message"]</h1>
+@using (Html.BeginForm("ProfileForES", "Profile", FormMethod.Post))
+{
+<div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Growth, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Growth, new { @class = "form-control", @style = "margin-bottom:10px" })
+            @Html.ValidationMessageFor(m => m.Growth, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Weight, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Weight, new { @class = "form-control", @style = "margin-bottom:10px" })
+            @Html.ValidationMessageFor(m => m.Weight, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Bust, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Bust, new { @class = "form-control", @style = "margin-bottom:10px" })
+            @Html.ValidationMessageFor(m => m.Bust, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Waist, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Waist, new { @class = "form-control", @style = "margin-bottom:10px" })
+            @Html.ValidationMessageFor(m => m.Waist, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Hip, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Hip, new { @class = "form-control", @style = "margin-bottom:10px" })
+            @Html.ValidationMessageFor(m => m.Hip, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Shoes_size, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Shoes_size, new { @class = "form-control", @style = "margin-bottom:10px" })
+            @Html.ValidationMessageFor(m => m.Shoes_size, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">Тип волос: </div>
+
+        @{
+            List<SelectListItem> listItems_hair = new List<SelectListItem>();
+            listItems_hair.Add(new SelectListItem
+            {
+                Text = "Светлые волосы",
+                Value = "Light"
+            });
+            listItems_hair.Add(new SelectListItem
+            {
+                Text = "Темные волосы",
+                Value = "Dark",
+            });
+        }
+        <div class="col-md-10">
+            
+            @if (ViewData["HairColor"] == null)
+            {
+                @Html.DropDownListFor(model => model.HairColour, listItems_hair, "-- Select Hair --");
+            }
+            else
+            {
+                <label>@ViewData["HairColor"]</label>
+            }
+
+        </div>
+
+
+    </div>
+    <div class="form-group">
+        <div class="col-md-2 control-label">Тип кожи: </div>
+
+        @{
+            List<SelectListItem> listItems_skin = new List<SelectListItem>
+                          ();
+            listItems_skin.Add(new SelectListItem
+            {
+                Text = "Светлая кожа",
+                Value = "Light"
+            });
+            listItems_skin.Add(new SelectListItem
+            {
+                Text = "Темная кожа",
+                Value = "Dark",
+            });
+        }
+        <div class="col-md-10">
+            @if (ViewData["SkinColor"] == null)
+            {
+                @Html.DropDownListFor(model => model.SkinColour, listItems_skin, "-- Select Skin --");
+            }
+            else
+            {
+                <label>@ViewData["SkinColor"]</label>
+            }
+            
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Далее" class="btn btn-default" />
+          
+        </div>
+    </div>
+</div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

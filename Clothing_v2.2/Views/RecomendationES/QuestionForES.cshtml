@@ -1,0 +1,233 @@
+﻿@model Clothing_v2._2.Models.QuestionsModels
+
+@{
+    ViewBag.Title = "QuestionForES";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>
+    Рекомендация с помощью
+    экспертной системы
+</h2>
+
+<div>
+    @{
+        List<SelectListItem> listItems = new List<SelectListItem>();
+        listItems.Add(new SelectListItem
+        {
+            Text = "Свадьба",
+            Value = "Свадьба"
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = "Банкет",
+            Value = "Банкет",
+            Selected = true
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = "Торжественный случай",
+            Value = "Торжественный случай"
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = "Менее официальное мероприятие",
+            Value = "Менее официальное мероприятие"
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = "Ежедневный",
+            Value = "Ежедневный",
+            Selected = true
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = "Деловой",
+            Value = "Деловой"
+        });
+
+        listItems.Add(new SelectListItem
+        {
+            Text = "Свидание",
+            Value = "Свидание"
+        });
+    }
+
+    <div class="row">
+        <div class=" col-md-6">
+            @using (Html.BeginForm("QuestionForES", "RecomendationES", FormMethod.Post))
+            {
+                <div class="form-horizontal">
+                    @Html.DropDownListFor(model => model.Select_action, Model.Actions, "-- Select Status --", new { id = "ActionSelect" })
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Далее" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @*<h1> @ViewData["Message"]</h1>*@
+        @if (ViewData["Message"] == "Inserted")
+        {
+            <div class=" col-md-6">
+                <h1>Рекомендация</h1>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Мероприятие</label>
+                    </div>
+                    <div class="col-md-4" id="1">@ViewData["action"]</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Размер верха</label>
+                    </div>
+                    <div class="col-md-4" id="Size_UP">@ViewData["Size_UP"]</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>размер низа</label>
+                    </div>
+                    <div class="col-md-4" id="Size_DOWN">@ViewData["Size_DOWN"]</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Модель</label>
+                    </div>
+                    <div class="col-md-4" id="Model">@ViewData["Model"]</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Цвет костюма</label>
+                    </div>
+                    <div class="col-md-4">@Html.DropDownList("SuitColor", new SelectList((System.Collections.IEnumerable)ViewData["SuitColors"], "Value", "Text"), "--Select Suit Colour--", new { id = "SuitSelect" })</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Цвет рубашки</label>
+                    </div>
+                    <div class="col-md-4">@Html.DropDownList("ShirtColor", new SelectList((System.Collections.IEnumerable)ViewData["ShirtColors"], "Value", "Text"), new { id = "ShirtSelect" })</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Цвет галстука</label>
+                    </div>
+                    <div class="col-md-4">@Html.DropDownList("ShirtColor", new SelectList((System.Collections.IEnumerable)ViewData["TieColors"], "Value", "Text"), new { id = "TieSelect" })</div>
+                </div>
+                
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" value="Сохранить" class="btn btn-default" id="SaveSelect"/>
+        </div>
+    </div>
+                
+            </div>
+
+        }
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(function () {
+            $('#ShirtSelect').change(function () {
+                // получаем выбранный id
+                var suitColor = $(this).val();
+                var data = JSON.stringify({
+                    'action': $('#ActionSelect').val(),
+                    'suitColor': $('#SuitSelect').val(),
+                    'shirtColor': $(this).val()
+                });
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetTie","RecomendationES")',
+                    data: {
+                        someMoreAction: $('#ActionSelect').val(),
+                        suitColor: $('#SuitSelect').val(),
+                        shirtColor: $(this).val()
+                    },
+                    success: function (data) {
+                        // заменяем содержимое присланным частичным представлением
+                        $('#TieSelect').empty();
+                        if (data.length > 0) {
+                            $("#TieSelect").append(
+                                $('<option disabled selected></option>').val("").html("Выберите галстук"));
+                            $.each(data, function (i, color) {
+                                $("#TieSelect").append(
+                                    $('<option></option>').val(color.Value).html(color.Text));
+                            });
+                        } else {
+                            $("#TieSelect").append(
+                                $('<option></option>').val("0").html("Нет подходящих галстуков"));
+                        }
+                    }
+                });
+            });
+        });
+
+        $(function () {
+            $('#SuitSelect').change(function () {
+                // получаем выбранный id
+                var suitColor = $(this).val();
+                var data = JSON.stringify({
+                    'action': $('#ActionSelect').val(),
+                    'suitColor': $(this).val()
+                });
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetShirt","RecomendationES")',
+                    data: {
+                        someMoreAction: $('#ActionSelect').val(),
+                        suitColor: $(this).val()
+                    },
+                    success: function (data) {
+                        $('#TieSelect').empty();
+                        $("#TieSelect").append(
+                                $('<option></option>').val("Выберите цвет рубашки").html("Выберите цвет рубашки"));
+                        // заменяем содержимое присланным частичным представлением
+                        $('#ShirtSelect').empty();
+                        if (data.length > 0) {
+                            $("#ShirtSelect").append(
+                                $('<option disabled selected></option>').val("").html("Выберите рубашку"));
+                            $.each(data, function (i, color) {
+                                $("#ShirtSelect").append(
+                                    $('<option></option>').val(color.Value).html(color.Text));
+                            });
+                        } else {
+                            $("#ShirtSelect").append(
+                                $('<option></option>').val("0").html("Нет подходящих рубашек"));
+                        }
+                    }
+                });
+            });
+        })
+
+        $(function () {
+            $('#SaveSelect').click(function () {
+                //alert("ЖМЯК!")
+                // получаем выбранный id
+                var suitColor = $(this).val();
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("SaveRecomendation", "RecomendationES")',
+                    data: {
+                        CSuit: $('#SuitSelect').val(),
+                        CShirt: $('#ShirtSelect').val(),
+                        CTie: $('#TieSelect').val()
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if (data == 0) {
+                            //Сохранено в Ваши рекомендации
+                        } else {
+                            alert("Не удалось сохранить");
+                        }
+                    }
+                });
+            });
+        })
+    </script>
+
+}

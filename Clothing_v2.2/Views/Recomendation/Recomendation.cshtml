@@ -1,0 +1,42 @@
+﻿@model Clothing_v2._2.Models.QuestionsModels
+
+@{
+    ViewBag.Title = "Имеющиеся рекомендации";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>
+    Имеющиеся рекомендации
+</h2>
+<h1>@ViewData["Message"]</h1>
+<div>   
+    <table >
+        <thead>
+            <tr>
+                <td><p>Мероприятие</p></td>
+                <td><p>Размер рубашки и костюма</p></td>
+                <td><p>Размер брюк</p></td>
+                <td><p>Модель костюма</p></td>
+                <td><p>Цвет костюма</p></td>
+                <td><p>Цвет рубашки</p></td>
+                <td><p>Цвет гастука</p></td>
+            </tr>
+        </thead>
+        <tbody>
+            @Html.Raw(ViewData["TBody"])
+        </tbody>
+    </table>
+
+    <table border="1" width="1200px">
+        <thead>
+            <tr>
+                <td><p>Цвет костюма</p></td>
+                <td><p>Цвет рубашки</p></td>
+                <td><p>Цвет гастука</p></td>
+            </tr>
+        </thead>
+        <tbody>
+            @Html.Raw(ViewData["Body_ES"])
+        </tbody>
+    </table>
+</div>

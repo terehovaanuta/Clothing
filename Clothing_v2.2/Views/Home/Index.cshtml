@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Подбор одежды";
+}
+
+<div class="jumbotron">
+    <h1>Подбор одежды</h1>
+    <p>Рады приветствовать Вас на нашем сайте.</p>
+    <p>Если Вы здесь, значит, Вам нужна помощь с выбором подходящей одежды под конкретное мероприятие.</p>
+    <p>
+        Наш сайт предоставляет два варианта: ответить на несколько вопросов или же
+        загрузить фотографию Вашего костюма, чтобы определить подходит ли он под заданное мероприятие.
+    </p>
+</div>
+
+@if (!Request.IsAuthenticated)
+{
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Начало работы</h2>
+        <p>
+            Потратьте минуту, чтобы зарегистрироваться.
+            Так эксперты смогут дать более точные рекомендации.
+        </p>
+        <p>@Html.ActionLink("Регистрация", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })</p>
+    </div>
+    <div class="col-md-6">
+        <h2>Уже зарегистрированы?</h2>
+        <p>Зайдите в свой аккаунт для продолжения работы</p>
+        <br>
+        <p>@Html.ActionLink("Вход", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })</p>
+    </div>
+</div>
+}
+
+@if (Request.IsAuthenticated)
+{
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Экспертная система</h2>
+            <p>
+                Ответив на вопросы, Вы получите рекомендацию
+                что и каких цветов стоит надеть на конкретное
+                мероприятие
+            </p>
+            <br />
+            <p>@Html.ActionLink("Экспертная система", "QuestionForES", "RecomendationES", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })</p>
+        </div>
+        <div class="col-md-6">
+            <h2>Подбор по фото</h2>
+            <p>
+                Здесь Вы можете загрузить свою фотографию.
+                С помощью нейронной сети будут определены предметы одежды,
+                а экспертная система выбаст рекомендации по
+                подобранным цветам
+            </p>
+            <p> @Html.ActionLink("Подбор по фото", "Analanalysis_photo", "RecomendationNS", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })</p>
+        </div>
+    </div>
+}
